@@ -1,0 +1,99 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.decivePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 10);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+// Espacio para colocar los objetos
+    
+      // CRUZ 
+var materialCruz = new THREE.MeshLambertMaterial({ color: 0x996703, side: THREE.DoubleSide });
+
+// Parte vertical
+var geometryVertical = new THREE.BoxGeometry(2, 20, 2);
+var cruzVertical = new THREE.Mesh(geometryVertical, materialCruz);
+scene.add(cruzVertical);
+cruzVertical.position.set(0, 15, 0);
+
+// Parte horizontal
+var geometryHorizontal = new THREE.BoxGeometry(10, 2, 2);
+var cruzHorizontal = new THREE.Mesh(geometryHorizontal, materialCruz);
+scene.add(cruzHorizontal);
+cruzHorizontal.position.set(0, 18, 0);
+
+// Agrupamos las dos partes en un solo objeto
+var cruz = new THREE.Group();
+cruz.add(cruzVertical);
+cruz.add(cruzHorizontal);
+scene.add(cruz);
+
+// Posición de toda la cruz
+cruz.position.set(0, 0, -20);
+
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+
+    //🪄🪄 Animación - 
+
+cruz.rotation.y += 0.02; 
+cruz.rotation.x = 0.3;  
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

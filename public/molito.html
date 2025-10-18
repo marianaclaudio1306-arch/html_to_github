@@ -1,0 +1,111 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x6D00A3);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 10);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+// Espacio para colocar los objetos
+
+// Plato
+var plato = new THREE.CylinderGeometry(1.2, 1.2, 0.1, 32);
+var platoMat = new THREE.MeshBasicMaterial({ color: 0xD1CFCF });
+var platoMesh = new THREE.Mesh(plato, platoMat);
+platoMesh.position.set(-0.2, -1, 0);
+scene.add(platoMesh);
+
+// Muslito
+var musli = new THREE.SphereGeometry(0.4, 22, 16);
+var musliMat = new THREE.MeshBasicMaterial({ color: 0x733E01 }); // color naranja caricatura
+var musliMesh = new THREE.Mesh(musli, musliMat);
+musliMesh.scale.set(1, 0.8, 1);
+musliMesh.position.set(0, -0.6, 0);
+scene.add(musliMesh);
+
+// Huesito
+var huesito = new THREE.CylinderGeometry(0.1, 0.1, 0.7, 20);
+var huesitoMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+var huesitoMesh = new THREE.Mesh(huesito, huesitoMat);
+huesitoMesh.rotation.z = Math.PI / 2;
+huesitoMesh.position.set(-0.5,-0.6, 0);
+scene.add(huesitoMesh);
+
+var huesitofin = new THREE.SphereGeometry(0.15, 16, 16);
+var huesitofinMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+var huesitofinMesh = new THREE.Mesh(huesitofin, huesitofinMat);
+huesitofinMesh.position.set(-0.80, -0.6, 0.1);
+scene.add(huesitofinMesh);
+
+var huesitofinMesh2 = new THREE.Mesh(huesitofin, huesitofinMat);
+huesitofinMesh2.position.set(-0.80, -0.6, -0.1);
+scene.add(huesitofinMesh2);
+
+//molito
+var molito = new THREE.CylinderGeometry(1, 1, 0., 32);
+var molitoMat = new THREE.MeshBasicMaterial({ color: 0x944F00});
+var molito = new THREE.Mesh(molito, molitoMat);
+molito.position.set(-0.2, -0.90, 0);
+scene.add(molito);
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+
+    //🪄🪄 Animación - 
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

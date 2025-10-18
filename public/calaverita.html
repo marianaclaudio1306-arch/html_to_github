@@ -1,0 +1,147 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x6D00A3);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 10);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+// Espacio para colocar los objetos
+
+
+
+// Cabeza
+
+
+var cabecita = new THREE.SphereGeometry(1, 32, 32);
+var cabecitaMat = new THREE.MeshBasicMaterial({ color: 0xffffe0 });
+var cabecitaMesh = new THREE.Mesh(cabecita, cabecitaMat);
+cabecitaMesh.scale.set(1, 1.2, 1);
+cabecitaMesh.position.set(0, 0, 0);
+scene.add(cabecitaMesh);
+
+
+//mandibula
+var mandi = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
+var mandiMat = new THREE.MeshBasicMaterial({ color: 0xffffe0 });
+var mandibula = new THREE.Mesh(mandi, mandiMat);
+mandibula.position.set(0, -0.75, 0);
+scene.add(mandibula);
+
+// Ojos
+var ojo = new THREE.CircleGeometry(0.25, 32);
+var ojoMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+var derojo = new THREE.Mesh(ojo, ojoMat);
+derojo.position.set(-0.4, 0.2, 1);
+scene.add(derojo);
+
+var izqojo = new THREE.Mesh(ojo, ojoMat);
+izqojo.position.set(0.4, 0.2, 1);
+scene.add(izqojo);
+
+// Nariz
+var nariz = new THREE.CircleGeometry(0.08, 16);
+var narizMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+var nariIzq = new THREE.Mesh(nariz, narizMat);
+nariIzq.position.set(-0.1, -0.1, 1);
+scene.add(nariIzq);
+
+var nariDer = new THREE.Mesh(nariz, narizMat);
+nariDer.position.set(0.1, -0.1, 1);
+scene.add(nariDer);
+
+// Boca 
+var boca = new THREE.BoxGeometry(0.8, 0.05, 0.05);
+var bocaMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+var bocaMesh = new THREE.Mesh(boca, bocaMat);
+bocaMesh.position.set(0, -0.4, 1);
+scene.add(bocaMesh);
+
+// Dientes
+var dienteGeo = new THREE.BoxGeometry(0.02, 0.2, 0.05);
+var dienteMat = new THREE.MeshBasicMaterial({ color: 0x000000 });
+
+var diente1 = new THREE.Mesh(dienteGeo, dienteMat);
+diente1.position.set(-0.32, -0.4, 1.01);
+scene.add(diente1);
+
+var diente2 = new THREE.Mesh(dienteGeo, dienteMat);
+diente2.position.set(-0.16, -0.4, 1.01);
+scene.add(diente2);
+
+var diente3 = new THREE.Mesh(dienteGeo, dienteMat);
+diente3.position.set(0, -0.4, 1.01);
+scene.add(diente3);
+
+var diente4 = new THREE.Mesh(dienteGeo, dienteMat);
+diente4.position.set(0.16, -0.4, 1.01);
+scene.add(diente4);
+
+var diente5 = new THREE.Mesh(dienteGeo, dienteMat);
+diente5.position.set(0.32, -0.4, 1.01);
+scene.add(diente5);
+
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+
+    //🪄🪄 Animación - 
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

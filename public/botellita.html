@@ -1,0 +1,112 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.decivePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 10);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+// Espacio para colocar los objetos
+
+//  Luz
+var luz = new THREE.DirectionalLight(0xffffff, 1);
+luz.position.set(5, 5, 5);
+scene.add(luz);
+
+//  Materiales
+var vidrio = new THREE.MeshPhongMaterial({ color: 0xedd599, transparent: true, opacity: 0.8 });
+var tapaMat = new THREE.MeshPhongMaterial({ color: 0xcc2b1d });
+var etiquetaMat = new THREE.MeshPhongMaterial({ color: 0xf6d34b });
+var etiquetitaMat = new THREE.MeshPhongMaterial({ color: 0x557a3b });
+
+//  Botella base 
+var Base = new THREE.CylinderGeometry(1.5, 1.8, 5, 32);
+var base = new THREE.Mesh(Base, vidrio);
+scene.add(base);
+
+// Cuellito
+var Cuello = new THREE.CylinderGeometry(0.7, 1.0, 2, 32);
+var cuello = new THREE.Mesh(Cuello, vidrio);
+cuello.position.y = 3.5;
+scene.add(cuello);
+
+// Tapa 
+var Tapa = new THREE.CylinderGeometry(0.8, 0.8, 1, 32);
+var tapa = new THREE.Mesh(Tapa, tapaMat);
+tapa.position.y = 5;
+scene.add(tapa);
+
+//Etiqueta 
+var etiqueta = new THREE.BoxGeometry(2, 1.5, 0.05);
+var etiquetita = new THREE.Mesh(etiqueta, etiquetaMat);
+etiquetita.position.set(0, 0.5, 1.65);
+scene.add(etiquetita);
+
+// dibujito
+var dibujito= new THREE.BoxGeometry(1.5, 1.2, 0.03);
+var etiquetadibujito = new THREE.Mesh(dibujito, etiquetitaMat);
+etiquetadibujito.position.set(0, 0.5, 1.7);
+scene.add(etiquetadibujito);
+
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+
+    //🪄🪄 Animación - 
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

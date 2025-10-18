@@ -1,0 +1,155 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.decivePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 10);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+// Espacio para colocar los objetos
+    
+// PLANO (suelo)
+var geometryPlano = new THREE.PlaneGeometry(100, 100);
+var materialPlano = new THREE.MeshLambertMaterial({
+    color: 0xCCCCCC,  // gris claro
+    side: THREE.DoubleSide
+});
+var plano = new THREE.Mesh(geometryPlano, materialPlano);
+scene.add(plano);
+plano.position.set(0, -0.5, 0);
+plano.rotation.x = 1.5708; // 90 grados para que quede acostado
+
+//// COPA DE VINO ////
+
+
+// BASE
+var geometryBase = new THREE.CylinderGeometry(5, 5, 0.5, 32);
+var materialBase = new THREE.MeshLambertMaterial({
+    color: 0xD3D3D3,
+    side: THREE.DoubleSide
+});
+var base = new THREE.Mesh(geometryBase, materialBase);
+scene.add(base);
+base.position.set(0, 0, 0);
+
+
+// TALLO
+var geometryTallo = new THREE.CylinderGeometry(0.5, 0.5, 5, 32);
+var materialTallo = new THREE.MeshLambertMaterial({
+    color: 0xC0C0C0,
+    side: THREE.DoubleSide
+});
+var tallo = new THREE.Mesh(geometryTallo, materialTallo);
+scene.add(tallo);
+tallo.position.set(0, 2.5, 0);
+
+
+// COPA (media esfera orientada hacia arriba)
+var geometryCopa = new THREE.SphereGeometry(5, 32, 32, 0, 6.2831, 1.57, 1.57); 
+var materialCopa = new THREE.MeshPhongMaterial({
+    color: 0xFFFFFF,
+    transparent: true,
+    opacity: 0.2,
+    side: THREE.DoubleSide
+});
+var copa = new THREE.Mesh(geometryCopa, materialCopa);
+scene.add(copa);
+copa.position.set(0, 10, 0);
+
+
+// BORDE 
+var geometryBorde = new THREE.TorusGeometry(4.9, 0.1, 16, 100);
+var materialBorde = new THREE.MeshLambertMaterial({
+    color: 0xD3D3D3
+});
+var borde = new THREE.Mesh(geometryBorde, materialBorde);
+scene.add(borde);
+borde.position.set(0, 10, 0);
+borde.rotation.x = 1.5708; // 90 grados
+
+
+
+//LIQUIDO 
+
+var geometryVino = new THREE.CylinderGeometry(4.6, 2.5, 4, 40);
+var materialVino = new THREE.MeshPhongMaterial({
+    color: 0x8B0000,
+    transparent: true,
+    opacity: 0.8,
+    side: THREE.DoubleSide
+});
+var vino = new THREE.Mesh(geometryVino, materialVino);
+scene.add(vino);
+vino.position.set(0, 8, 0);
+
+// LUZ
+var luz = new THREE.PointLight(0xffffff, 1);
+luz.position.set(10, 20, 10);
+scene.add(luz);
+
+var luzAmbiente = new THREE.AmbientLight(0x404040, 1.5);
+scene.add(luzAmbiente);
+
+
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+
+    //🪄🪄 Animación - 
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>

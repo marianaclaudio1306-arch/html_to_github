@@ -1,0 +1,107 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+<head> 
+    <title>Práctica 01</title>
+</head>
+<body>
+    
+<canvas id="myCanvas">
+    <!--El elemento HTML canvas se puede utilizar para dibujar gráficos a través de 
+        secuencias de comandos (por lo general JavaScript ).-->
+</canvas>
+
+<!-- Aquí va todo el código de three.js -->
+<!-- script type="importmap" importa las librerías necesarias para three.js-->
+<script type="importmap"> 
+    {
+        "imports":{
+            "three": "./js/three.module.js",
+            "three/OrbitControls": "./js/OrbitControls.js" 
+        }
+}
+</script>
+<script type="module"> 
+//🗃️🗃️ Mandar llamar a la librería
+    import * as THREE from 'three'; 
+    import {OrbitControls} from 'three/OrbitControls';
+    console.log(OrbitControls);
+
+//🕹️🕹️ Renderer - Realiza una conexión entre el código y el canvas
+    var renderer = new THREE.WebGLRenderer({
+    canvas: document.getElementById('myCanvas'), antialias: true,
+    });
+    renderer.setPixelRatio(window.decivePixelRatio);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x70707C);
+
+
+// 🎬 Creando nueva escena - Es el espacio donde se colocan los objetos
+    var scene = new THREE.Scene();
+
+//🎥🎥 Agregar una cámara de perspectiva
+    var camera = new THREE.PerspectiveCamera(70,window.innerWidth / window.innerHeight,0.1,2000
+      );
+    scene.add(camera);
+
+    //Settings de la cámara
+    camera.position.set(0, 4, 10);
+
+    // Añadiendo los OrbitControls
+    var controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+
+// Espacio para colocar los objetos
+    
+     var loader = new THREE.TextureLoader();
+var fotoTextura = loader.load('imagenes/lau.jpeg'); // 👈 cambia esta ruta por tu imagen
+
+
+var fotoMat = new THREE.MeshBasicMaterial({
+    map: fotoTextura,
+    side: THREE.DoubleSide
+});
+
+// Plano
+var foto = new THREE.PlaneGeometry(3, 2);
+var fotito = new THREE.Mesh(foto, fotoMat);
+fotito.position.set(0, 0, 0);
+scene.add(fotito);
+
+
+// Marco 
+var marco = new THREE.PlaneGeometry(3.3, 2.3);
+var marcoMat = new THREE.MeshBasicMaterial({
+    color: 0x8b4513, // café tipo madera
+    side: THREE.DoubleSide
+});
+var marco = new THREE.Mesh(marco, marcoMat);
+marco.position.set(0, 0, -0.05); // detrás de la foto
+scene.add(marco);
+
+// Borde 
+var borde= new THREE.BoxGeometry(3.4, 2.4, 0.1);
+var bordeMat = new THREE.MeshBasicMaterial({ color: 0x5a3a1a });
+var borde = new THREE.Mesh(borde, bordeMat);
+borde.position.set(0, 0, -0.1);
+scene.add(borde);
+         
+      
+   
+
+//🎰🎰Rendering y animación
+    requestAnimationFrame(render);
+    function render() {
+
+    //🪄🪄 Animación - 
+
+    //🎮🎮Actualización del OrbitControls para generar la suavidad de movimiento
+    controls.update();
+
+    //Llamado para renderizar y volver a llamar a la misma función (render)
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+    }
+</script>
+</body>
+</html>
